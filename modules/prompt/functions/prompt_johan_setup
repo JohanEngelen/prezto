@@ -1,5 +1,5 @@
 #
-# A simple theme from PeepCode.
+# A simple theme from peepcode modified by johan.
 # http://peepcode.com/blog/2012/my-command-line-prompt
 #
 # Authors:
@@ -10,19 +10,14 @@
 #   http://i.imgur.com/LhgmW.png
 #
 
-function prompt_peepcode_precmd {
+function prompt_johan_precmd {
   # Get Git repository information.
   if (( $+functions[git-info] )); then
     git-info
   fi
-
-  # Get Ruby information.
-  if (( $+functions[ruby-info] )); then
-    ruby-info
-  fi
 }
 
-function prompt_peepcode_setup {
+function prompt_johan_setup {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
   prompt_opts=(cr percent subst)
@@ -32,7 +27,7 @@ function prompt_peepcode_setup {
   autoload -Uz vcs_info
 
   # Add a hook for calling info functions before each command.
-  add-zsh-hook precmd prompt_peepcode_precmd
+  add-zsh-hook precmd prompt_johan_precmd
 
   # Set git-info parameters.
   zstyle ':prezto:module:git:info' verbose 'no'
@@ -43,43 +38,41 @@ function prompt_peepcode_setup {
   zstyle ':prezto:module:git:info:unindexed' format ' '
   zstyle ':prezto:module:git:info:untracked' format ' '
   zstyle ':prezto:module:git:info:dirty' format ' %F{8}✗%f'
-  zstyle ':prezto:module:git:info:keys' format 'rprompt' '%b%c%s%D'
-
-  # Set ruby-info parameters.
-  zstyle ':prezto:module:ruby:info:version' format ' %F{white}%v%f'
+  zstyle ':prezto:module:git:info:keys' format 'prompt' '%b%c%D' \
+                                               'rprompt' ''
 
   # Define prompts.
   PROMPT="
-%~   
+%~   ${git_info[prompt]}
 %(?.%F{green}${1:-☻ }%f.%F{red}${1:-☻ }%f) "
-RPROMPT='${ruby_info[version]}${git_info[rprompt]}'
+RPROMPT=''
 
 }
 
-function prompt_peepcode_help {
+function prompt_johan_help {
   cat <<EOH
 This prompt's last command exit status symbol is customizable:
 
-  prompt peepcode [<symbol>]
+  prompt johan [<symbol>]
 
 If this option is not provided, the symbol defaults to ☻.
 EOH
 }
 
-function prompt_peepcode_preview {
+function prompt_johan_preview {
   local +h PROMPT='%# '
   local +h RPROMPT=''
   local +h SPROMPT=''
 
   if (( $# > 0 )); then
-    prompt_preview_theme 'peepcode' "$@"
+    prompt_preview_theme 'johan' "$@"
   else
-    prompt_preview_theme 'peepcode'
+    prompt_preview_theme 'johan'
     print
-    prompt_preview_theme 'peepcode' "❯"
+    prompt_preview_theme 'johan' "❯"
     print
-    prompt_preview_theme 'peepcode' "$"
+    prompt_preview_theme 'johan' "$"
   fi
 }
 
-prompt_peepcode_setup "$@"
+prompt_johan_setup "$@"
